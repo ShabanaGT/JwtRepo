@@ -14,17 +14,19 @@ import jakarta.persistence.Table;
         public String name;
         public String email;
         public String password;
+        public  String role;
 
         public Users() {
             super();
         }
 
-        public Users(int id, String name, String email, String password) {
+        public Users(int id, String name, String email, String password,String role) {
             super();
             this.id = id;
             this.name = name;
             this.email = email;
             this.password = password;
+            this.role=role;
         }
 
 
@@ -58,6 +60,14 @@ import jakarta.persistence.Table;
 
         public void setPassword(String password) {
             this.password = password;
+        }
+
+        public String getRole() {
+            return role;
+        }
+
+        public void setRole(String role) {
+            this.role = role;
         }
     }
 

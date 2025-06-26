@@ -6,6 +6,11 @@ import com.example.JwtDemo.Repository.UserRepository;
 
 import com.example.JwtDemo.Security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,9 +23,14 @@ public class Serviceimpl implements  UserService{
     @Autowired
     JwtUtil jwtutilObj;
 
+    private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+
     @Override
     public String createUser(Users newUser) {
-         userrepo.save(newUser);
+
+         String encodedPassword=passwordEncoder.encode(newUser.getPassword());
+         newUser.setPassword(encodedPassword);
+        userrepo.save(newUser);
          return "User registered successfully";
     }
 
@@ -32,6 +42,18 @@ public class Serviceimpl implements  UserService{
         }
         String token=jwtutilObj.generateToken(user);
         return new JwtDto(email,password,token);
+    }
+
+    @Override
+    public JwtDto signinWithHashing(String email,String password){
+        Users user=userrepo.findByEmail(email);
+
+        if(user==null && !passwordEncoder.matches(password,user.getPassword()) ){
+            return new JwtDto(email,"","Login failee");
+        }
+        String token=jwtutilObj.generateToken(user);
+        return new JwtDto(email,"",token);
+
     }
 
     @Override
@@ -69,4 +91,22 @@ public class Serviceimpl implements  UserService{
         return "No user found";
 
     }
+
+    @Override
+    public UserDetails findUser(String email) throws UsernameNotFoundException {
+        Users user = userrepo.findByEmail(email);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User Not found");
+        }
+
+        List<GrantedAuthority> authorities = List.of(new SimpleGrantedAuthority(user.getRole()));
+
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                authorities
+        );
+    }
+
 }

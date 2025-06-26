@@ -9,6 +9,8 @@ import com.example.JwtDemo.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/User")
 public class UserController {
@@ -16,7 +18,7 @@ public class UserController {
     UserService service;
    @Autowired
     JwtUtil jwtutilObj;
-    @PostMapping("/createUser")
+    @PostMapping("/addUser ")
     public String registerUser(@RequestBody Users newuser) {
         return service.createUser(newuser);
     }
@@ -25,6 +27,11 @@ public class UserController {
     public JwtDto tokenLoginMethod(@RequestBody LoginDto userObj){
         return service.signinUser(userObj.getEmail(),userObj.getPassword());
 
+    }
+
+    @PostMapping("/loginHashing")
+    public JwtDto loginWithHashing(@RequestBody JwtDto userObj){
+        return service.signinWithHashing(userObj.getEmail(),userObj.getPassword());
     }
 
     @PutMapping("/updateUser/{id}")
@@ -44,9 +51,23 @@ public class UserController {
         return service.updateUser(id, updatedUser);
     }
 
+    @GetMapping
+    public List<Users> gettAllUsers(){
+        return service.getAllUser();
+    }
+
     @GetMapping("/getOne/{id}")
     public Users getOneUser(@PathVariable int id){
         return service.getUser(id);
+    }
+    @GetMapping("/admin/dashboard")
+    public String adminPage() {
+        return "Welcome Admin!";
+    }
+
+    @GetMapping("/user/profile")
+    public String userPage() {
+        return "Welcome User!";
     }
 
 
