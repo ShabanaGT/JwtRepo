@@ -15,18 +15,20 @@ import jakarta.persistence.Table;
         public String email;
         public String password;
         public  String role;
+        public String photo;
 
         public Users() {
             super();
         }
 
-        public Users(int id, String name, String email, String password,String role) {
+        public Users(int id, String name, String email, String password,String role,String photo) {
             super();
             this.id = id;
             this.name = name;
             this.email = email;
             this.password = password;
             this.role=role;
+            this.photo=photo;
         }
 
 
@@ -69,5 +71,9 @@ import jakarta.persistence.Table;
         public void setRole(String role) {
             this.role = role;
         }
+
+        public String getPhoto(){return photo;}
+
+        public void setPhoto(){this.photo=photo;}
     }
 

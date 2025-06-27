@@ -1,18 +1,23 @@
 package com.example.JwtDemo.Services;
 
 import com.example.JwtDemo.DTO.JwtDto;
+import com.example.JwtDemo.Models.Products;
 import com.example.JwtDemo.Models.Users;
+import com.example.JwtDemo.Repository.ProductRepository;
 import com.example.JwtDemo.Repository.UserRepository;
 
 import com.example.JwtDemo.Security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +27,8 @@ public class Serviceimpl implements  UserService{
   UserRepository userrepo;
     @Autowired
     JwtUtil jwtutilObj;
+    @Autowired
+    ProductRepository productrepo;
 
     private BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
 
@@ -107,6 +114,14 @@ public class Serviceimpl implements  UserService{
                 user.getPassword(),
                 authorities
         );
+    }
+
+    @Override
+    public Products uploadProductImage(Products product, MultipartFile imageFile) throws IOException {
+        product.setImageName(imageFile.getOriginalFilename());
+        product.setImageType(imageFile.getContentType());
+        product.setImageData(imageFile.getBytes());
+        return  productrepo.save(product);
     }
 
 }

@@ -2,12 +2,16 @@ package com.example.JwtDemo.Controllers;
 
 import com.example.JwtDemo.DTO.JwtDto;
 import com.example.JwtDemo.DTO.LoginDto;
+import com.example.JwtDemo.Models.Products;
 import com.example.JwtDemo.Models.Users;
 import com.example.JwtDemo.Repository.UserRepository;
 import com.example.JwtDemo.Security.JwtUtil;
 import com.example.JwtDemo.Services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -70,6 +74,17 @@ public class UserController {
         return "Welcome User!";
     }
 
+    @PostMapping("/admin/addproductimage")
+    public ResponseEntity<?> uploadProductImage(@RequestPart Products product,
+                                                @RequestPart MultipartFile imageFile){
+        try{
+            Products product1= service.uploadProductImage(product,imageFile);
+            return new ResponseEntity<>(product1, HttpStatus.CREATED);
+        }
+        catch(Exception e){
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
 

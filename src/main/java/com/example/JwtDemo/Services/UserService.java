@@ -1,9 +1,12 @@
 package com.example.JwtDemo.Services;
 
 import com.example.JwtDemo.DTO.JwtDto;
+import com.example.JwtDemo.Models.Products;
 import com.example.JwtDemo.Models.Users;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface UserService {
@@ -15,4 +18,5 @@ public interface UserService {
     public String updateUser(int id,Users editUser);
     public String deleteUser(int id);
     public UserDetails findUser(String email);
+    public Products uploadProductImage(Products product, MultipartFile imageFile) throws IOException;
 }
