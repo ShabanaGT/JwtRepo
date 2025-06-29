@@ -94,7 +94,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        if (path.contains("/login") || path.contains("/createUser")) {
+        if (path.contains("/User")) {
             filterChain.doFilter(request, response);
             return;
         }

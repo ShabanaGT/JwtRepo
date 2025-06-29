@@ -19,4 +19,6 @@ public interface UserService {
     public String deleteUser(int id);
     public UserDetails findUser(String email);
     public Products uploadProductImage(Products product, MultipartFile imageFile) throws IOException;
+    public String saveUserRecord(Users userObj);
+    public Users getUserById(int id);
 }

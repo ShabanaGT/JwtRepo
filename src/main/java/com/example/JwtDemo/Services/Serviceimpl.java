@@ -118,10 +118,30 @@ public class Serviceimpl implements  UserService{
 
     @Override
     public Products uploadProductImage(Products product, MultipartFile imageFile) throws IOException {
-        product.setImageName(imageFile.getOriginalFilename());
-        product.setImageType(imageFile.getContentType());
-        product.setImageData(imageFile.getBytes());
-        return  productrepo.save(product);
+        return null;
     }
+
+    @Override
+    public String saveUserRecord(Users userObj) {
+        userrepo.save(userObj);
+        return "User saved Successfully" ;
+    }
+
+    @Override
+    public  Users getUserById(int id) {
+        return userrepo.findById(id).orElseThrow(()->new RuntimeException("No user found"));
+    }
+
+
+
+//    @Override
+//    public Products uploadProductImage(Products product, MultipartFile imageFile) throws IOException {
+//        product.setImageName(imageFile.getOriginalFilename());
+//        product.setImageType(imageFile.getContentType());
+//        product.setImageData(imageFile.getBytes());
+//        return  productrepo.save(product);
+//    }
+
+
 
 }
